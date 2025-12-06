@@ -1,0 +1,31 @@
+template: testify
+
+packages:
+  lesson1/internal/compute:
+    interfaces:
+      QueryCompute:
+      CommandCompute:
+    config:
+      dir: "{{.InterfaceDir}}/mocks"
+      filename: "compute_mock_auto.go"
+      pkgname: "compute_test"
+      formatter: gofmt
+
+  lesson1/internal/cli:
+    interfaces:
+      CommandHandler:
+    config:
+      dir: "{{.InterfaceDir}}/mocks"
+      filename: "cli_mock.go"
+      pkgname: "cli_test"
+      formatter: gofmt
+
+  lesson1/internal/database/storage:
+    interfaces:
+      CommandStorage:
+      QueryStorage:
+    config:
+      dir: "{{.InterfaceDir}}/mocks"
+      filename: "storage_mock.go"
+      pkgname: "storage_test"
+      formatter: gofmt

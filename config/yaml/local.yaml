@@ -1,0 +1,2 @@
+#Application
+env: "envLocal" # dev, local or prod
