@@ -32,12 +32,6 @@ func (h *HashTable) Get(key string) (string, error) {
 }
 
 func (h *HashTable) Del(key string) error {
-	const op = "HashTable.Del"
-
-	_, ok := h.data[key]
-	if !ok {
-		return fmt.Errorf("%s: %w", op, dberrors.ErrNotFound)
-	}
 
 	delete(h.data, key)
 	return nil
