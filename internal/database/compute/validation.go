@@ -1,26 +1,22 @@
 package compute
 
-import (
-	"lesson1/internal/command"
-)
-
 func IsAnyLetter(symbol rune) bool {
-	return (symbol >= command.LetterRangeLower[0] &&
-		symbol <= command.LetterRangeLower[1]) ||
-		(symbol >= command.LetterRangeUpper[0] &&
-			symbol <= command.LetterRangeUpper[1])
+	return (symbol >= LetterRangeLower[0] &&
+		symbol <= LetterRangeLower[1]) ||
+		(symbol >= LetterRangeUpper[0] &&
+			symbol <= LetterRangeUpper[1])
 }
 
 func IsUpperLetter(symbol rune) bool {
-	return symbol >= command.LetterRangeUpper[0] && symbol <= command.LetterRangeUpper[1]
+	return symbol >= LetterRangeUpper[0] && symbol <= LetterRangeUpper[1]
 }
 
 func IsDigit(symbol rune) bool {
-	return symbol >= command.DigitRange[0] && symbol <= command.DigitRange[1]
+	return symbol >= DigitRange[0] && symbol <= DigitRange[1]
 }
 
 func IsPunctuation(symbol rune) bool {
-	for _, pct := range command.Punctuation {
+	for _, pct := range Punctuation {
 		if symbol == pct {
 			return true
 		}

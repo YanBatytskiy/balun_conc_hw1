@@ -1,4 +1,4 @@
-package command
+package compute
 
 const (
 	CommandSet = "SET"

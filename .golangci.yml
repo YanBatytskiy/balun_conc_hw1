@@ -22,7 +22,6 @@ linters:
     - dupword
     - durationcheck
     - embeddedstructfieldcheck
-    - err113
     - errcheck
     - errchkjson
     - errname
@@ -108,6 +107,7 @@ linters:
     - wrapcheck
     - zerologlint
   disable:
+    - err113
     - nlreturn
     - whitespace
     - gochecknoglobals

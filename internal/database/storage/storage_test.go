@@ -2,15 +2,15 @@ package storage_test
 
 import (
 	"context"
+	"errors"
+	"spyder/internal/database/storage"
+	"spyder/internal/lib/logger/slogdiscard"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"lesson1/internal/database/dberrors"
-	"lesson1/internal/database/storage"
-	"lesson1/internal/database/storage/engine"
-	"lesson1/internal/lib/logger/slogdiscard"
+	inmemorystorage "spyder/internal/database/storage/engine/in_memory"
 )
 
 func TestStorage(t *testing.T) {
@@ -46,7 +46,7 @@ func TestStorage(t *testing.T) {
 		{
 			name:    "get not found",
 			run:     func(ctx context.Context, s *storage.Storage) (string, error) { return s.Get(ctx, "missing") },
-			wantErr: dberrors.ErrNotFound,
+			wantErr: inmemorystorage.ErrNotFound,
 		},
 		{
 			name: "del ok after set",
@@ -58,21 +58,22 @@ func TestStorage(t *testing.T) {
 			},
 		},
 		{
-			name:    "del not found",
-			run:     func(ctx context.Context, s *storage.Storage) (string, error) { return "", s.Del(ctx, "missing") },
-			wantErr: dberrors.ErrNotFound,
+			name: "del not found",
+			run:  func(ctx context.Context, s *storage.Storage) (string, error) { return "", s.Del(ctx, "missing") },
 		},
 	}
 
 	for _, tc := range tests {
-		tc := tc
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
 			ctx := context.Background()
 			logger := slogdiscard.NewDiscardLogger()
-			eng := engine.NewEngine(logger)
-			s := storage.NewStorage(logger, eng)
+			eng, err := inmemorystorage.NewEngine(logger)
+			require.NoError(t, err)
+
+			s, err := storage.NewStorage(logger, eng)
+			require.NoError(t, err)
 
 			if tc.setup != nil {
 				tc.setup(ctx, s)
@@ -81,7 +82,8 @@ func TestStorage(t *testing.T) {
 			got, err := tc.run(ctx, s)
 
 			if tc.wantErr != nil {
-				require.ErrorIs(t, err, tc.wantErr)
+				require.Error(t, err)
+				assert.True(t, errors.Is(err, tc.wantErr))
 				return
 			}
 

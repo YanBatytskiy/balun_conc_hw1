@@ -1,2 +1,15 @@
-#Application
-env: "envLocal" # dev, local or prod
+engine_type: "in_memory"
+network:
+  engine_address: "127.0.0.1:3323"
+  max_connections: 5
+  max_message_size: 4096
+  idle_timeout: 5m
+  buffer_size: 4096
+  type: tcp
+logging:
+  level: "dev"
+  output: "/log/output.log"
+  logger_storage_path: "./spyder/storage/log_storage.db"
+  logger_address: "127.0.0.1:8082"
+  user: "myuser"
+  password: "mypassword"
