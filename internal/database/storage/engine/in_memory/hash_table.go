@@ -1,10 +1,4 @@
-package hashtable
-
-import (
-	"fmt"
-
-	"lesson1/internal/database/dberrors"
-)
+package inmemory
 
 type HashTable struct {
 	data map[string]string
@@ -22,17 +16,14 @@ func (h *HashTable) Set(key, value string) error {
 }
 
 func (h *HashTable) Get(key string) (string, error) {
-	const op = "HashTable.Get"
-
 	result, ok := h.data[key]
 	if !ok {
-		return "", fmt.Errorf("%s: %w", op, dberrors.ErrNotFound)
+		return "", ErrNotFound
 	}
 	return result, nil
 }
 
 func (h *HashTable) Del(key string) error {
-
 	delete(h.data, key)
 	return nil
 }

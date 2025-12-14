@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	compute "lesson1/internal/compute"
+	compute "spyder/internal/database/compute"
 )
 
 func TestIsAnyLetter(t *testing.T) {
@@ -13,7 +13,7 @@ func TestIsAnyLetter(t *testing.T) {
 
 	assert := assert.New(t)
 
-	var testCases = []struct {
+	testCases := []struct {
 		letter rune
 		wants  bool
 	}{
@@ -33,7 +33,7 @@ func TestIsUpperLetter(t *testing.T) {
 	t.Parallel()
 	assert := assert.New(t)
 
-	var testCases = []struct {
+	testCases := []struct {
 		letter rune
 		wants  bool
 	}{
@@ -52,7 +52,7 @@ func TestIsDigit(t *testing.T) {
 	t.Parallel()
 	assert := assert.New(t)
 
-	var testCases = []struct {
+	testCases := []struct {
 		symbol rune
 		wants  bool
 	}{
@@ -71,7 +71,7 @@ func TestIsPunctuation(t *testing.T) {
 	t.Parallel()
 	assert := assert.New(t)
 
-	var testCases = []struct {
+	testCases := []struct {
 		symbol rune
 		wants  bool
 	}{
@@ -91,7 +91,7 @@ func TestValidateCommand(t *testing.T) {
 	t.Parallel()
 	assert := assert.New(t)
 
-	var testCases = []struct {
+	testCases := []struct {
 		raw   string
 		wants bool
 	}{
@@ -112,7 +112,7 @@ func TestValidateArgument(t *testing.T) {
 	t.Parallel()
 	assert := assert.New(t)
 
-	var testCases = []struct {
+	testCases := []struct {
 		raw   string
 		wants bool
 	}{

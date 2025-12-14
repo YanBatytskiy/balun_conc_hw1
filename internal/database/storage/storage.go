@@ -2,11 +2,8 @@ package storage
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"log/slog"
-
-	"lesson1/internal/database/dberrors"
+	"strings"
 )
 
 type Storage struct {
@@ -28,51 +25,49 @@ func NewStorage(log *slog.Logger, eng interface {
 	CommandStorage
 	QueryStorage
 },
-) *Storage {
+) (*Storage, error) {
+	if log == nil {
+		return nil, ErrInvalidLogger
+	}
+
 	return &Storage{
 		log:            log,
 		commandStorage: eng,
 		queryStorage:   eng,
-	}
+	}, nil
 }
 
 func (s *Storage) Set(ctx context.Context, key, value string) error {
-	const op = "storage.Set"
-
 	err := s.commandStorage.Set(ctx, key, value)
 	if err != nil {
 		s.log.Error("set failed", slog.String("key", key), slog.Any("err", err))
-		return fmt.Errorf("%s: %w", op, err)
+		return err
 	}
 	return nil
 }
 
 func (s *Storage) Get(ctx context.Context, key string) (string, error) {
-	const op = "storage.Get"
-
 	result, err := s.queryStorage.Get(ctx, key)
 	if err != nil {
-		if errors.Is(err, dberrors.ErrNotFound) {
-			s.log.Info("get not found", slog.String("key", key))
+		if strings.Contains(err.Error(), "not found") {
+			s.log.Debug("get not found", slog.String("key", key))
 		} else {
 			s.log.Error("get failed", slog.String("key", key), slog.Any("err", err))
 		}
-		return "", fmt.Errorf("%s: %w", op, err)
+		return "", err
 	}
 	return result, nil
 }
 
 func (s *Storage) Del(ctx context.Context, key string) error {
-	const op = "storage.Del"
-
 	err := s.commandStorage.Del(ctx, key)
 	if err != nil {
-		if errors.Is(err, dberrors.ErrNotFound) {
-			s.log.Info("del not found", slog.String("key", key))
+		if strings.Contains(err.Error(), "not found") {
+			s.log.Debug("del not found", slog.String("key", key))
 		} else {
 			s.log.Error("del failed", slog.String("key", key), slog.Any("err", err))
 		}
-		return fmt.Errorf("%s: %w", op, err)
+		return err
 	}
 	return nil
 }
